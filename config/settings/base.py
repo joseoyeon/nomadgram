@@ -73,10 +73,10 @@ DJANGO_APPS = [
     "django.contrib.admin",
 ]
 THIRD_PARTY_APPS = [
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "rest_framework",
+    "allauth", #registration
+    "allauth.account", #registration
+    "allauth.socialaccount", #registration
+    "rest_framework", # REST Framework
 ]
 LOCAL_APPS = [
     "nomadgram.users.apps.UsersAppConfig",

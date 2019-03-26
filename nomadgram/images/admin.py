@@ -5,12 +5,45 @@ from . import models
 
 @admin.register(models.Image) #d
 class ImageAdmin(admin.ModelAdmin):
-    pass #null class
+        list_display_links=(
+            'location',
+            'caption',
+        )
+
+        search_fields=(
+            'location',
+            'caption',
+        )
+
+        list_filter=(
+            'location',
+        )
+        list_display = (
+        'file',
+        'location',
+        'caption',
+        'creator',
+        'created_at',
+        'updated_at',
+    )
+
 
 @admin.register(models.Like)
 class LikeAdmin(admin.ModelAdmin):
-    pass
+        list_display = (
+        'creator',
+        'image',
+        'created_at',
+        'updated_at',
+    )
 
 @admin.register(models.Comment)
 class CommantAdmin(admin.ModelAdmin):
-    pass
+
+    list_display = (
+        'message',
+        'creator',
+        'image',
+        'created_at',
+        'updated_at',
+    )
