@@ -7,8 +7,6 @@ from django.utils.encoding import python_2_unicode_compatible
 class TimeStampModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
-    #class 에 대한 부가 정보는 이렇게 써야 한다.
     class Meta:
         abstract = True
 
@@ -29,7 +27,7 @@ class Comment(TimeStampModel):
     """Comment Model"""
     message = models.TextField()
     creator = models.ForeignKey(user_models.User,null=True, on_delete=models.CASCADE)
-    image = models.ForeignKey(Image,null=True, on_delete=models.CASCADE)
+    image = models.ForeignKey(Image,null=True,related_name= 'comments',on_delete=models.CASCADE)
  
     def __str__(self):
         return self.message
@@ -38,7 +36,7 @@ class Comment(TimeStampModel):
 class Like(TimeStampModel):
     """ Like Models """
     creator = models.ForeignKey(user_models.User,null=True,  on_delete=models.CASCADE)
-    image = models.ForeignKey(Image, null=True,on_delete=models.CASCADE)
+    image = models.ForeignKey(Image, null=True,related_name= 'likes',on_delete=models.CASCADE)
     
     def __str__(self):
         return 'User:{} - Image Caption:{}'.format(self.creator.username, self.image.caption)
