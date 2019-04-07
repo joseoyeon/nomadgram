@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from . import models
 from nomadgram.users import models as user_models
-
+from rest_framework import status
 
 class LikeSerializer(serializers.ModelSerializer):
 
@@ -20,7 +20,7 @@ class FeedUserSerializer(serializers.ModelSerializer):
         )
 
 class CommentSerializer(serializers.ModelSerializer):
-    creator = FeedUserSerializer()
+    creator = FeedUserSerializer(read_only=True)
 
     class Meta :
         model = models.Comment
