@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from . import models, serializers
-from rest_framework import statuss
+from rest_framework import status
 
 class Feed(APIView):
     def get(self, request, format=None):
@@ -20,13 +20,13 @@ class Feed(APIView):
 
 
 class LikeImage(APIView):
-    def get(self, request, image_id, format=None):
+    def post(self, request, image_id, format=None):
 
         user = request.user
         try : 
             found_image = models.Image.objects.get(id=image_id)
         except models.Image.DoesNotExist:
-            return Response(status=404)
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
         try:
             preexisiting_like = models.Like.objects.get(
@@ -34,7 +34,7 @@ class LikeImage(APIView):
                 image = found_image
             )
             preexisiting_like.delete()
-            return Response(status=202)
+            return Response(status=status.HTTP_204_NO_CONTENT)
         except models.Like.DoesNotExist:
             new_like =models.Like.objects.create(
                 creator =user,
@@ -46,12 +46,15 @@ class LikeImage(APIView):
 class CommentOnImage(APIView): 
     def post(self, request, image_id, format=None) :
         user = request.user
+         
         try:
-            found_image =models.Image.Objects.get(id=image_id)
-        except: models.Image
+            found_image =models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist :
+            return Response(status=404)
+
         serializer = serializers.CommentSerializer(data=request.data)
-        if serializer.is_vaild() :
-            serializer.save(creator=user)
-            return Response(data=serializer.data, status=201)
+        if serializer.is_valid() :
+            serializer.save(creator=user, image =found_image)
+            return Response(data=serializer.data, status= status.HTTP_201_CREATED)
         else:
-            return Response(data=serializer.errors, status=400)
+            return Response(data=serializer.errors, status= status_HTTP_BAD_REQUEST)
