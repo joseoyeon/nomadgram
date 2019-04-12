@@ -47,3 +47,13 @@ class ImageSerializer(serializers.ModelSerializer):
         'like_count',
         'creator',
         )
+
+class UserProfilesImageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Image  
+        fields = (
+        'file',
+        'comment_count',
+        'like_count',
+        )
