@@ -64,7 +64,7 @@ class UserFollowing(APIView):
         except models.User.DoesNotExist : 
             return Response(status= 404)
         
-        user_following = found_user.followings.all()
+        user_following = found_user.following.all()
         serializer = serializers.ListUserSerializer(
             user_following, many=True)
         return Response(data = serializer.data, status = 200)
