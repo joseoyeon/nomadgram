@@ -4,6 +4,14 @@ from nomadgram.users import models as user_models
 from rest_framework import status
 from taggit_serializer.serializers import (TagListSerializerField,TaggitSerializer)
 
+class SmallImageSerializer(serializers.ModelSerializer) : 
+    """Used for the notifications"""
+    class Meta :
+        model = models.Image
+        fields = (
+            'file',
+        )
+
 class FeedUserSerializer(serializers.ModelSerializer):
 
     class Meta : 

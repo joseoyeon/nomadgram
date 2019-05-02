@@ -12,5 +12,3 @@ urlpatterns = [
 ]
 
 
-
-#images/search

@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from . import models, serializers
 from rest_framework import status
+from . import models, serializers
+from nomadgram.notifications import views as notification_views
 
 class Feed(APIView):
     def get(self, request, format=None):
@@ -40,6 +41,7 @@ class LikeImage(APIView):
                 image = found_image
             )
             new_like.save()
+            notification_views.create_notification(user, found_image.creator,'like', found_image)
             return Response(status=201)
 
 class UnLikeImage(APIView):
@@ -65,7 +67,7 @@ class UnLikeImage(APIView):
 class CommentOnImage(APIView): 
     def post(self, request, image_id, format=None) :
         user = request.user
-         
+         #create =notification for comment
         try:
             found_image =models.Image.objects.get(id=image_id)
         except models.Image.DoesNotExist :
@@ -74,6 +76,10 @@ class CommentOnImage(APIView):
         serializer = serializers.CommentSerializer(data=request.data)
         if serializer.is_valid() :
             serializer.save(creator=user, image =found_image)
+            
+            notficiations_views.create_notification(
+                user, found_image.creator, 'comment', found_image, serializer.data['message'])
+            
             return Response(data=serializer.data, status= status.HTTP_201_CREATED)
         else:
             return Response(data=serializer.errors, status= status_HTTP_BAD_REQUEST)
