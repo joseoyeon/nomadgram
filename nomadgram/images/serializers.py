@@ -2,6 +2,7 @@ from rest_framework import serializers
 from . import models
 from nomadgram.users import models as user_models
 from rest_framework import status
+from taggit_serializer.serializers import (TagListSerializerField,TaggitSerializer)
 
 class FeedUserSerializer(serializers.ModelSerializer):
 
@@ -35,7 +36,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
     comments = CommentSerializer(many =True)
     creator = FeedUserSerializer()
-
+    tags = TagListSerializerField()
     class Meta:
         model = models.Image        
         fields = (
@@ -46,13 +47,15 @@ class ImageSerializer(serializers.ModelSerializer):
         'comments',
         'like_count',
         'creator',
+        'tags',
         )
 
-class UserProfilesImageSerializer(serializers.ModelSerializer):
+class CountImageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Image  
         fields = (
+        'id',
         'file',
         'comment_count',
         'like_count',

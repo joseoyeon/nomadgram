@@ -87,3 +87,15 @@ class Comment(APIView):
             return Response(status = 204)
         except models.Comment.DoesNotExist:
             return Response(status = 404)
+
+class Search (APIView) :
+    def get(self, request, formet=None):
+        hashtags = request.query_params.get('hashtags',None)
+        
+        if hashtags is not None :
+            hashtags = hashtags.split(",")
+            images = models.Image.objects.filter(tags__name__in = hashtags).distinct()
+            serializer = serializers.CountImageSerializer(images, many=True)
+            return Response(data= serializer.data, status=200)
+        else :
+            return Response(status =404)

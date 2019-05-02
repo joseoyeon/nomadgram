@@ -68,3 +68,27 @@ class UserFollowing(APIView):
         serializer = serializers.ListUserSerializer(
             user_following, many=True)
         return Response(data = serializer.data, status = 200)
+
+class Search(APIView) : 
+    def get(self, request, format=None) :
+        username = request.query_params.get('username',None)
+        
+        if username is not None : 
+            users = models.User.objects.filter(username__istartswith=username)
+            serializer = serializers.ListUserSerializer(users,many=True)
+            return Response(data=serializer.data, status=200)
+        else : 
+            return Response( status =404)
+
+""" def UserFollowingFBC(request, username) : 
+    if request.method == 'GET':
+        '''request.POST.get('key', value)
+        try:
+            found_user = models.User.objects.get(username=username)
+        except models.User.DoesNotExist : 
+            return Response(status= 404)
+        
+        user_following = found_user.following.all()
+        serializer = serializers.ListUserSerializer(
+            user_following, many=True)
+        return Response(data = serializer.data, status = 200) """

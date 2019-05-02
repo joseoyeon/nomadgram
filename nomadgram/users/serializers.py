@@ -14,7 +14,7 @@ class ListUserSerializer(serializers.ModelSerializer):
             )
             
 class UserProfileSerializer(serializers.ModelSerializer):
-    images = images_serializers.UserProfilesImageSerializer(many=True)
+    images = images_serializers.CountImageSerializer(many=True)
     class Meta: 
         model = models.User
         fields=(
