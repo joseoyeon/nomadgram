@@ -3,6 +3,19 @@ from rest_framework.response import Response
 from rest_framework import status
 from . import models, serializers
 from nomadgram.notifications import views as notification_views
+from nomadgram.users import models as user_models
+
+class ImageDetail(APIView) : 
+    def get(self, request, image_id, format=None) :
+        user = request.user
+        try : 
+            image= models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist :
+            return Response(status= status.HTTP_404_NOT_FOUND)
+
+        serializer = serializers.ImageSerializer(image)
+        return Response(data = serializer.data, status = status.HTTP_200_OK)
+
 
 class Feed(APIView):
     def get(self, request, format=None):
@@ -10,7 +23,7 @@ class Feed(APIView):
         following_users = user.following.all()
         image_list = []
 
-        for following_user in following_users:
+        for following_user in following_usesrs:
             user_images = following_user.images.all()[:2]
             for image in user_images:
                 image_list.append(image)
@@ -38,6 +51,14 @@ class ModerateComments(APIView) :
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class LikeImage(APIView):
+
+    def get (self, request, image_id, format=None):
+        likes = models.Like.objects.frilter(image__id = image_id)
+        like_creators_ids = likes.values('creator_id')
+        users = user_models.User.objects.filter(id__in=like_creators_ids)
+        serializers = user_serializers.ListUserSerializer(users, many = True)
+        return Response(data=serializer.data, status = status.HTTP_200_OK)
+        
     def post(self, request, image_id, format=None):
 
         user = request.user
