@@ -11,7 +11,7 @@ urlpatterns = [
     path("search/", view=views.Search.as_view(), name="user_search"),
     path("<username>/", view=views.UserProfile.as_view(), name="user_profile"),
     path("<username>/password/", view=views.ChangePassword.as_view(), name="change"),
-]
+    path("login/facebook/", view=views.FacebookLogin.as_view(), name='fb_login'),]
 
 '''
 app_name = "images"

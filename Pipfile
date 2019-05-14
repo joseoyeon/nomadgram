@@ -36,6 +36,8 @@ Sphinx = "==1.8.5"
 factory_boy = "==2.11.1"
 django-taggit = "*"
 django-taggit-serializer = "*"
+djangorestframework-jwt = "*"
+django-rest-auth = "*"
 
 [requires]
 python_version = "3.7"

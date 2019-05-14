@@ -51,11 +51,12 @@ class InputImageSerializer(serializers.ModelSerializer) :
             'caption',
         ]
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     comments = CommentSerializer(many =True)
     creator = FeedUserSerializer()
     tags = TagListSerializerField()
+    
     class Meta:
         model = models.Image        
         fields = (
@@ -70,7 +71,7 @@ class ImageSerializer(serializers.ModelSerializer):
         'created_at',
         )
 
-class CountImageSerializer(serializers.ModelSerializer):
+class CountImageSerializer(TaggitSerializer, serializers.ModelSerializer):
 
     class Meta:
         model = models.Image  

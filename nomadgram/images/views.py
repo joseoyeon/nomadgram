@@ -49,7 +49,7 @@ class ImageDetail(APIView) :
         image.delete()
         return Response(status = status.HTTP_204_NO_CONTENT)
 
-class Feed(APIView):
+class Images(APIView):
     def get(self, request, format=None):
         user = request.user
         following_users = user.following.all()
@@ -68,6 +68,15 @@ class Feed(APIView):
         sorted_list = sorted(image_list, key = lambda x: x.created_at, reverse =True)
         serializer = serializers.ImageSerializer(sorted_list, many=True)
         return Response(serializer.data)
+
+    def post(self, request, format = None):
+        user = request.user
+        serializer = serializers.InputImageSerializer(data=request.data)
+        if serilaizer.is_valid() :
+            serializer.save(creator = user)
+            return Response(data= serilaizer.data, status = status.HTTP_201_CREATED)
+        else :
+            return Resposne(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ModerateComments(APIView) :
     def delete(self, request, image_id, comment_id, format=None):
